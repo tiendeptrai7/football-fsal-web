@@ -19,6 +19,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'football-teams',
+        loadChildren: () =>
+          import('@pages/football-team/football-team.module').then(
+            x => x.FootballTeamModule
+          ),
+      },
+      {
         path: 'my-profile',
         loadChildren: () =>
           import('@pages/profile/profile.module').then(x => x.ProfileModule),

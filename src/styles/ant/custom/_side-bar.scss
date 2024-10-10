@@ -1,0 +1,20 @@
+.side-bar{
+  z-index: 1000;
+  overflow-x: hidden;
+  border-right: 1px solid whitesmoke;
+  background: white;
+  height: 100%;
+  position: fixed;
+  left: 0;
+
+  &__logo{
+    border-bottom: 1px solid whitesmoke;
+    padding: 10px;
+    img {
+      margin: auto;
+      width: auto;
+      height: 4rem;
+      overflow: hidden;
+    }
+  }
+}

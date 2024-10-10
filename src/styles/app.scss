@@ -1,1 +1,116 @@
-@import './css/scss/main.scss';
+@import './bootstrap//css/scss/main.scss';
+
+@import 'variables';
+@import 'mixins';
+@import 'reset';
+@import 'common';
+
+
+/*******************/
+/*** Components ***/
+/*****************/
+
+/*General*/
+@import './ant/components/general/typorgraphy';
+@import './ant/components/general/buttons';
+@import './ant/components/general/icons';
+
+/*Layout*/
+@import './ant/components/layout/breakpoint';
+@import './ant/components/layout/grid';
+
+/*Navigation*/
+@import './ant/components/navigation/_affix';
+@import './ant/components/navigation/_breadcrumb';
+@import './ant/components/navigation/dropdown';
+@import './ant/components/navigation/menu';
+@import './ant/components/navigation/pagination';
+@import './ant/components/navigation/page-header';
+@import './ant/components/navigation/steps';
+
+/*Data Entry*/
+@import './ant/components/data-entry/autocomplete';
+@import './ant/components/data-entry/cascader';
+@import './ant/components/data-entry/checkbox';
+@import './ant/components/data-entry/date-picker';
+@import './ant/components/data-entry/form';
+@import './ant/components/data-entry/input';
+@import './ant/components/data-entry/mention';
+@import './ant/components/data-entry/radio';
+@import './ant/components/data-entry/rate';
+@import './ant/components/data-entry/select';
+@import './ant/components/data-entry/slider';
+@import './ant/components/data-entry/switch';
+@import './ant/components/data-entry/time-picker';
+@import './ant/components/data-entry/transfer';
+@import './ant/components/data-entry/tree-select';
+@import './ant/components/data-entry/upload';
+
+/*Data Display*/
+@import './ant/components/data-display/avatar';
+@import './ant/components/data-display/badge';
+@import './ant/components/data-display/calendar';
+@import './ant/components/data-display/card';
+@import './ant/components/data-display/carousel';
+@import './ant/components/data-display/collapse';
+@import './ant/components/data-display/comment';
+@import './ant/components/data-display/descriptions';
+@import './ant/components/data-display/list';
+@import './ant/components/data-display/popover';
+@import './ant/components/data-display/statistic';
+@import './ant/components/data-display/table';
+@import './ant/components/data-display/tabs';
+@import './ant/components/data-display/tag';
+@import './ant/components/data-display/timeline';
+@import './ant/components/data-display/tooltip';
+@import './ant/components/data-display/tree';
+
+/*Feedback*/
+@import './ant/components/feedback/alert';
+@import './ant/components/feedback/drawer';
+@import './ant/components/feedback/message';
+@import './ant/components/feedback/modal';
+@import './ant/components/feedback/notifications';
+@import './ant/components/feedback/progress';
+@import './ant/components/feedback/spin';
+
+/*Other*/
+@import './ant/components/others/anchor';
+@import './ant/components/others/back-to-top';
+@import './ant/components/others/divider';
+
+/******************/
+/*** Template ****/
+/****************/
+@import './ant/template/header.scss';
+@import './ant/template/layout.scss';
+@import './ant/template/side-nav.scss';
+@import './ant/template/footer.scss';
+
+/*****************/
+/***** Apps *****/
+/***************/
+@import './ant/apps/chat.scss';
+@import './ant/apps/file-manager.scss';
+@import './ant/apps/mail.scss';
+@import './ant/apps/e-commerce.scss';
+
+/*****************/
+/*** Plugins ****/
+/***************/
+@import './ant/plugins/chartist.scss';
+
+/*******************/
+/*** Utilities ****/
+/*****************/
+@import './ant/utilities/utilities-bs.scss';
+@import './ant/utilities/utilities-enlink.scss';
+
+/*******************/
+/****** Demo ******/
+/*****************/
+
+@import './ant/demo/demo';
+
+@import './ant/custom/custom';
+@import 'common';

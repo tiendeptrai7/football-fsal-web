@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { UserService } from '@/app/shared/services/user.service';
 import {
   TableDataType,
   TableHeader,
 } from '@/app/shared/components/data-table/data-table.component';
 import { NewsService } from '@/app/shared/services/news.service';
+import { UserService } from '@/app/shared/services/user.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -17,7 +17,7 @@ export class DashboardComponent {
   ) {}
 
   ngOnInit(): void {
-    this.getDataSource()
+    this.getDataSource();
   }
 
   getDataSource(): void {
@@ -39,7 +39,7 @@ export class DashboardComponent {
       render: data => {
         const imageUrl = data?.['team']['crest']; // Đường dẫn tới hình ảnh của team
         const teamName = data?.['team']['name']; // Tên của team
-    
+
         return `
           <span>
             <img class="img-thumbnail" style="width: 30px; height: 30px;" src="${imageUrl}"/>
@@ -47,7 +47,7 @@ export class DashboardComponent {
           </span>`;
       },
     },
-    
+
     {
       label: 'Matches',
       key: 'playedGames',

@@ -1,0 +1,26 @@
+.page-login {
+  .logo-main{
+    height: 4rem !important;
+    width: auto !important;
+  }
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -5px;
+}
+
+.divider-error{
+  color: #ff4d4f;
+  text-align: center;
+}
+
+.upload-error .ant-upload { 
+  color: #ff4d4f !important
+}
+
+.upload-error .ant-upload.ant-upload-select-picture-card { 
+  border-color: #ff4d4f !important
+}

@@ -1,0 +1,40 @@
+.main-layout{
+  flex-direction: row;
+  min-height: 100vh;
+
+  .side-bar__logo{
+    display: flex;
+  }
+
+
+  .right-layout{
+    margin-left: 250px;
+
+    .content{
+      margin: 0 1rem;
+
+      nz-breadcrumb {
+        margin: 1rem 0;
+      }
+
+      &__inner{
+        padding: 1.5rem;
+        background: #fff;
+        min-height: 360px;
+        &:has(.form-content){
+          padding: 0;
+        }
+      }
+    }
+
+    &.is-fold{
+      margin-left: 80px !important;
+    }
+  }
+
+
+  .footer{
+    text-align: center;
+    margin: 1rem 0;
+  }
+}
