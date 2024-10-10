@@ -1,0 +1,21 @@
+<action-bar
+  [filters]="filters"
+  [actions]="actions"
+  (queryParamsChange)="queryParams$.next($event)" />
+<data-table
+  [isAction]="true"
+  [editAction]="editAction"
+  [headers]="headers"
+  [dataSource]="dataSource"
+  (queryParamsChange)="queryParams$.next($event)" />
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Event Introduction"
+  (nzOnCancel)="handleCancel()"
+  [nzFooter]="null"
+  nzWidth="65%">
+  <ng-container *nzModalContent>
+    <div [innerHTML]="modalContent"></div>
+  </ng-container>
+</nz-modal>

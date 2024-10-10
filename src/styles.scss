@@ -1,0 +1,90 @@
+@import 'styles/app';
+
+.import {
+  .message{
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    color:  white;
+
+    &-error {
+      background-color: #f7b731;
+    }
+
+    &-success {
+      background-color: #198754;
+    }
+  }
+}
+
+.clearfix {
+  .ant-btn-icon-only.ant-btn-sm {
+    width: 24px !important;
+    height: 22px !important;
+    border: none !important;
+    &:hover{
+      background: none !important;
+    }
+  }
+  .ant-upload-list-item-actions {
+    display: flex;
+    align-items: center;
+    a {
+      display: inline-flex;
+    }
+  }
+  .ant-upload.ant-upload-select-picture-card>.ant-upload {
+    flex-direction: column;
+  }
+}
+
+richtext{
+  display: inline-block;
+  border-radius: 4px;
+  width: 100%;
+
+  .ant-form-item-explain-error{
+    display: none;
+  }
+
+  .ql-container{
+    min-height: 200px;
+  }
+
+  &.ng-invalid.ng-dirty{
+    .ql-toolbar {
+      border: 1px solid #ff4d4f;
+    }
+    .ql-container{
+      border: 1px solid #ff4d4f;
+    }
+    .ant-form-item-explain-error{
+      display: block;
+    }
+  }
+}
+
+.label-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.label-failed {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.label-processing {
+  background-color: #fff3cd;
+  color: #856404;
+}
+.label-draft {
+  background-color: #e2e3e5;
+  color: #6c757d;
+}
+
+.ant-avatar.ant-avatar-circle {
+  background-color: #cccccc;
+}
+
+.ant-avatar-string.ng-star-inserted {
+  position: unset;
+}

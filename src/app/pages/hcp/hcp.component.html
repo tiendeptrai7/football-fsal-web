@@ -1,0 +1,9 @@
+<action-bar
+  [filters]="filters"
+  [actions]="actions"
+  (queryParamsChange)="queryParams$.next($event)" />
+<data-table
+  [isAction]="false"
+  [headers]="headers"
+  [dataSource]="dataSource"
+  (queryParamsChange)="queryParams$.next($event)" />

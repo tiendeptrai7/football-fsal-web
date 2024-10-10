@@ -1,0 +1,211 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<nz-table
+  nzShowSizeChanger
+  [nzData]="dataSource?.data || []"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="dataSource?.total_records || 0"
+  [nzPageSize]="dataSource?.limit || 10"
+  [nzPageIndex]="dataSource?.page || 1"
+  [nzScroll]="{ x: 'calc(100vw - 350px)' }"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+      <th
+        *ngIf="showSelection"
+        nzWidth="50px"
+        [(nzChecked)]="isSelectedAll"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onSelectedAll($event)"></th>
+      <th class="text-center" *ngIf="showIndex" nzWidth="85px" nzLeft>#</th>
+      <th
+        *ngFor="let header of headers"
+        [nzColumnKey]="header.key"
+        [nzShowSort]="!!header?.sortable"
+        [nzSortFn]="!!header?.sortable"
+        [nzSortOrder]="!!header?.sortable ? getSortDir(header.key) : null"
+        [nzWidth]="header?.width || '200px'"
+        [nzLeft]="header?.sticky === 'left'"
+        [nzRight]="header?.sticky === 'right'">
+        {{ header.label }}
+      </th>
+      <th [nzWidth]="actionColumnSize" nzRight *ngIf="isAction">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource?.data; let i = index">
+      <td
+        *ngIf="showSelection"
+        [nzChecked]="selectedIndex.has(i)"
+        [nzDisabled]="actionDisableRule ? actionDisableRule(data) : false"
+        (nzCheckedChange)="onItemSelected(i, $event)"></td>
+      <td class="text-center" *ngIf="showIndex" nzLeft>
+        {{ i + 1 + (dataSource?.limit || 0) * ((dataSource?.page || 0) - 1) }}
+      </td>
+      <ng-template ngFor let-header [ngForOf]="headers">
+        <td
+          [ngSwitch]="header.type"
+          [nzLeft]="header?.sticky === 'left'"
+          [nzRight]="header?.sticky === 'right'">
+          <ng-container *ngSwitchCase="DataType.text">
+            {{ extractData(data, header.key, header.transform) }}
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.nest_array">
+            {{ extractDataFromArray(data, header.key, header.transform) }}
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.date">
+            {{ formatDate(extractData(data, header.key), 'YYYY-MM-DD') }}
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.date_time">
+            {{ formatDate(extractData(data, header.key), 'YYYY-MM-DD HH:mm') }}
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.img">
+            <img
+              nz-image
+              width="100px"
+              [nzSrc]="getImage(extractData(data, header.key))"
+              alt="" />
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.switch">
+            <nz-switch
+              [ngModel]="+(extractData(data, header.key) ?? 0) === 1"
+              [disabled]="
+                (header.disable ? header.disable(data) : false) ||
+                (header.permission ? !hasPermission(header.permission) : false)
+              "
+              (click)="
+                header.act ? header.act(data[mainKey]) : null
+              "></nz-switch>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.render">
+            <ng-container *ngIf="header.render">
+              <div (click)="header.act ? header.act(data[mainKey]) : null">
+                <div
+                  *ngIf="isHTML(header.render(data, i)); else elseBlock"
+                  [innerHTML]="header.render(data, i) | safeHtml"></div>
+                <ng-template #elseBlock>
+                  {{ header.render(data, i) }}
+                </ng-template>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.button">
+            <ng-container *ngIf="header.hide">
+              <button
+                *ngIf="!header.hide(data, i)"
+                nz-button
+                nzType="default"
+                nzShape="circle"
+                (click)="header.act ? header.act(data[mainKey], data) : null">
+                <i nz-icon [nzType]="header?.icon || ''"></i>
+              </button>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="DataType.simple_edit">
+            @if (
+              (header.disable ? header.disable(data) : false) ||
+              (header.permission ? !hasPermission(header.permission) : false)
+            ) {
+              {{ extractData(data, header.key, header.transform) }}
+            } @else {
+              @if (editCache[data[mainKey]]['edit'][header.key]) {
+                <nz-input-number
+                  class="w-100"
+                  [nzStep]="10000"
+                  [nzMin]="10000"
+                  [(ngModel)]="editCache[data[mainKey]].data[header.key]"
+                  [nzFormatter]="formatterNumber"
+                  nzPlaceHolder="Enter value">
+                </nz-input-number>
+                <br />
+                <a
+                  tabindex=""
+                  (keyup.enter)="
+                    saveEdit(data[mainKey], header.key, header.act)
+                  "
+                  (click)="saveEdit(data[mainKey], header.key, header.act)"
+                  class="save">
+                  Save
+                </a>
+                &nbsp;&nbsp;
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure to cancel?"
+                  (nzOnConfirm)="cancelEdit(data[mainKey], header.key)">
+                  Cancel
+                </a>
+              } @else {
+                <span>
+                  {{ extractData(data, header.key, header.transform) }}
+                </span>
+                <a
+                  tabindex=""
+                  (keyup.enter)="startEdit(data[mainKey], header.key)"
+                  (click)="startEdit(data[mainKey], header.key)">
+                  <i nz-icon nzType="edit"></i>
+                </a>
+              }
+            }
+          </ng-container>
+        </td>
+      </ng-template>
+      <td class="text-md-left" *ngIf="isAction" nzRight>
+        <ng-template ngFor let-action [ngForOf]="customAction">
+          <button
+            *ngIf="hasPermission(action?.permission)"
+            class="m-r-5"
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            [nzTooltipTitle]="action?.tooltip || 'Actions'"
+            [disabled]="action.disable ? action.disable(data) : false"
+            nz-popconfirm
+            [nzPopconfirmTitle]="action?.confirm"
+            [nzCondition]="!action?.confirm"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="action.act(data[mainKey])">
+            <i nz-icon [nzType]="action?.icon || 'aim'" theme="outline"></i>
+          </button>
+        </ng-template>
+        <button
+          *ngIf="editAction && hasPermission(editAction?.permission)"
+          class="m-r-5"
+          nz-button
+          nzType="default"
+          nzShape="circle"
+          nz-tooltip
+          nzTooltipTitle="Edit"
+          [disabled]="editAction.disable ? editAction.disable(data) : false"
+          (click)="editAction.act(data[mainKey])">
+          <i nz-icon nzType="edit" theme="outline"></i>
+        </button>
+
+        <button
+          *ngIf="deleteAction && hasPermission(editAction?.permission)"
+          class="m-r-5"
+          nz-button
+          nzType="default"
+          nzShape="circle"
+          nz-tooltip
+          nzTooltipTitle="Delete"
+          [disabled]="deleteAction.disable ? deleteAction.disable(data) : false"
+          nz-popconfirm
+          [nzPopconfirmTitle]="deleteAction.confirm"
+          [nzCondition]="!deleteAction.confirm"
+          nzPopconfirmPlacement="bottom"
+          (nzOnConfirm)="deleteAction.act(data[mainKey])">
+          <i nz-icon nzType="delete" theme="outline"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

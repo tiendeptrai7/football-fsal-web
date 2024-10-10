@@ -1,0 +1,178 @@
+<div nz-row [nzGutter]="[16, 16]">
+  <ng-template ngFor let-filter [ngForOf]="filters">
+    <div
+      *ngIf="filter.type === 'search'"
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <nz-input-group [nzPrefix]="prefixTemplate">
+        <input
+          nz-input
+          [placeholder]="filter?.placeholder"
+          [(ngModel)]="filter.value"
+          (keyup.enter)="applyFilter()"
+          name="filter" />
+      </nz-input-group>
+      <ng-template #prefixTemplate>
+        <i nz-icon nzType="search" class="opacity-05"></i>
+      </ng-template>
+    </div>
+
+    <div
+      *ngIf="
+        filter.type === 'date-range' ||
+        filter.type === 'month-range' ||
+        filter.type === 'date' ||
+        filter.type === 'week' ||
+        filter.type === 'month'
+      "
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <ng-container *ngIf="filter.type?.endsWith('-range'); else datepicker">
+        <nz-range-picker
+          class="w-100"
+          [nzMode]="filter.type.split('-range')[0]"
+          [nzFormat]="filter?.format || 'MM/dd/YYYY'"
+          [(ngModel)]="filter.value"></nz-range-picker>
+      </ng-container>
+      <ng-template #datepicker>
+        <nz-date-picker
+          class="w-100"
+          [nzMode]="filter.type"
+          [nzFormat]="filter?.format || 'MM/dd/YYYY'"
+          [nzPlaceHolder]="filter?.placeholder || 'Select date'"
+          [(ngModel)]="filter.value"></nz-date-picker>
+      </ng-template>
+    </div>
+
+    <div
+      *ngIf="filter.type === 'select'"
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <nz-select
+        class="w-100"
+        nzAllowClear
+        [(ngModel)]="filter.value"
+        [nzPlaceHolder]="filter?.placeholder ?? ''">
+        <nz-option
+          *ngFor="let option of filter?.options"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"></nz-option>
+      </nz-select>
+    </div>
+    <div
+      *ngIf="
+        filter.type === 'lazy-select' &&
+        filter.placeholder &&
+        filter.lazyDataSource
+      "
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <lazy-select
+        [dataSource]="filter.lazyDataSource"
+        [placeholder]="filter.placeholder"
+        [(ngModel)]="filter.value" />
+    </div>
+    <div
+      *ngIf="
+        filter.type === 'lazy-multiple-select' &&
+        filter.placeholder &&
+        filter.lazyDataSource
+      "
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <lazy-select
+        [mode]="'multiple'"
+        [dataSource]="filter.lazyDataSource"
+        [placeholder]="filter.placeholder"
+        [(ngModel)]="filter.value" />
+    </div>
+    <div
+      *ngIf="filter.type === 'multiple-select' && filter.placeholder"
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <nz-select
+        class="w-100"
+        [nzMode]="'multiple'"
+        [nzAllowClear]="true"
+        [nzShowSearch]="true"
+        [nzPlaceHolder]="filter.placeholder"
+        [(ngModel)]="filter.value">
+        <nz-option
+          *ngFor="let option of filter?.$options | async"
+          [nzLabel]="option.label"
+          [nzValue]="option.value"></nz-option>
+      </nz-select>
+    </div>
+
+    <div
+      *ngIf="filter.type === 'select-async'"
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <nz-select
+        class="w-100"
+        nzAllowClear
+        [(ngModel)]="filter.value"
+        [nzPlaceHolder]="filter?.placeholder ?? ''">
+        <nz-option
+          *ngFor="let option of filter?.$options | async"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"></nz-option>
+      </nz-select>
+    </div>
+
+    <div
+      [hidden]="true"
+      *ngIf="filter.type === 'input-hidden'"
+      nz-col
+      [nzSpan]="(filter?.size || 6) * 2">
+      <input
+        class="w-100"
+        [placeholder]="filter?.placeholder"
+        [(ngModel)]="filter.value"
+        name="input-hidden" />
+    </div>
+  </ng-template>
+</div>
+
+<div class="m-v-15" nz-row nzJustify="end" [nzGutter]="16">
+  <div nz-col nzXl="4" nzXXl="3">
+    <button
+      *ngIf="!hideBtnReset"
+      nz-button
+      nzType="primary"
+      nzDanger
+      class="w-100"
+      (click)="resetFilter()">
+      <i nz-icon nzType="undo" theme="outline"></i>
+      <span>Reset Filter</span>
+    </button>
+  </div>
+
+  <div nz-col nzXl="4" nzXXl="3">
+    <button
+      *ngIf="!hideBtnApply"
+      class="w-100"
+      nz-button
+      nzType="primary"
+      throttleClick
+      (byClick)="applyFilter()">
+      <i nz-icon nzType="enter" theme="outline"></i>
+      <span>Apply</span>
+    </button>
+  </div>
+
+  <ng-template ngFor let-action [ngForOf]="actions">
+    <div nz-col nzXl="4" nzXXl="3" *ngIf="hasPermission(action?.permission)">
+      <button
+        class="w-100"
+        nz-button
+        nzType="primary"
+        throttleClick
+        [nzLoading]="isLoadingAct"
+        (byClick)="actionClick(action.act)">
+        <i nz-icon [nzType]="action.icon" nzTheme="outline"></i>
+        {{ action.label }}
+      </button>
+    </div>
+  </ng-template>
+</div>

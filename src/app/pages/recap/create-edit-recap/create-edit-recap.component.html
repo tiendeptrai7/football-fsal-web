@@ -1,0 +1,102 @@
+<nz-card class="form-content" [nzExtra]="extraTemplate">
+  <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+    <h3 nz-typography>Event information</h3>
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Event</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            validateForm.value.event_id ? nzInvalidType : nzErrorRequire
+          ">
+          <lazy-select
+            placeholder="Select event"
+            [dataSource]="lazyEventSource"
+            formControlName="event_id"></lazy-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Recap Name</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            validateForm.value.name ? nzInvalidType : nzErrorRequire
+          ">
+          <input
+            class="form-control"
+            formControlName="name"
+            nz-input
+            [maxlength]="255"
+            name="name" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label>Status</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="status"> </nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <nz-divider></nz-divider>
+    <h3 nz-typography>Configuration</h3>
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label>Send after “x” days?</nz-form-label>
+        <nz-form-control>
+          <nz-input-number
+            class="form-control w-100"
+            formControlName="recap_days_before"
+            name="recap_days_before"
+            [nzMin]="1"
+            [nzMax]="365"
+            (nzBlur)="onBlurSendTimeSetting()"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Sending time</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            validateForm.value.recap_sent_at ? nzInvalidType : nzErrorRequire
+          ">
+          <nz-date-picker
+            class="form-control w-100"
+            formControlName="recap_sent_at"
+            [nzFormat]="'YYYY-MM-dd HH:mm'"
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            [nzDisabledDate]="
+              disabledDateTimeLessThan(event?.started_at).nzDisabledDate
+            "
+            [nzDisabledTime]="
+              disabledDateTimeLessThan(event?.started_at).nzDisabledTime
+            "
+            name="recap_sent_at"
+            (nzOnOpenChange)="onBlurSendTimeAt($event)"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="form-row">
+      <nz-form-item class="form-group col-12">
+        <nz-form-control
+          [nzErrorTip]="
+            validateForm.value.content ? nzInvalidType : nzErrorRequire
+          ">
+          <richtext
+            class="form-control"
+            formControlName="content"
+            name="content"></richtext>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <button class="mr-4" nz-button nzType="primary" (click)="goBack()">
+    <i nz-icon nzType="rollback" nzTheme="outline"></i>Back
+  </button>
+
+  <button nz-button nzType="default" (click)="save()">
+    <i nz-icon nzType="save" theme="outline"></i>
+    <span>Save</span>
+  </button>
+</ng-template>

@@ -1,0 +1,76 @@
+<div style="display: flex; flex-direction: column; padding: 15px; gap: 30px;">
+  <div class="card-news">
+    <div>
+      <img class="img-fluid" [src]="dataSource?.competition?.emblem" alt="premier-league-logo">
+    </div>
+    <div class="hero-text">
+      <p class="title">Premier League Standings</p>
+      <p class="title"> SEASON - {{dataSource?.filters?.season}}</p>
+    </div>
+  </div>
+
+  <data-table [headers]="headers" [dataSource]="dataSourceStandings" />
+  <div class="card-news">
+    <div>
+      <img class="img-fluid" [src]="dataSource?.competition?.emblem" alt="premier-league-logo">
+    </div>
+    <div class="hero-text">
+      <p class="title">Premier League Top Scorer</p>
+      <p class="title"> SEASON - {{dataSource?.filters?.season}}</p>
+    </div>
+  </div>
+  <data-table [headers]="headersTopscorer" [dataSource]="dataSourceTopscorer" />
+</div>
+
+
+	<!-- product section -->
+	<div class="product-section mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="section-title">	
+						<h3><span class="orange-text">BIG</span>MATCH</h3>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div class="col-lg-4 col-md-6 text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<a href="single-product.html"><img [src]="dataSource?.competition?.emblem" alt=""></a>
+						</div>
+						<h3>Mabchester United vs Liverpool</h3>
+						<p class="product-price"><span>Per Kg</span> 85$ </p>
+						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					</div>
+				</div>
+
+
+
+
+				<div class="col-lg-4 col-md-6 text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<a href="single-product.html"><img src="assets/img/products/product-img-2.jpg" alt=""></a>
+						</div>
+						<h3>Berry</h3>
+						<p class="product-price"><span>Per Kg</span> 70$ </p>
+						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6  text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<a href="single-product.html"><img src="assets/img/products/product-img-3.jpg" alt=""></a>
+						</div>
+						<h3>Lemon</h3>
+						<p class="product-price"><span>Per Kg</span> 35$ </p>
+						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end product section -->

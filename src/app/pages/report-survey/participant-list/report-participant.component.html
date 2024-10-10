@@ -1,0 +1,27 @@
+<div class="mb-3">
+  <div class="my-3">
+    <h4
+      style="
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      "
+      [nzTooltipTitle]="survey?.name"
+      nzTooltipPlacement="left"
+      nz-tooltip
+      nz-typography>
+      {{ survey?.name }}
+    </h4>
+  </div>
+</div>
+
+<action-bar
+  [filters]="filters"
+  [actions]="actions"
+  (queryParamsChange)="queryParams$.next($event)" />
+<data-table
+  [isAction]="true"
+  [headers]="headers"
+  [dataSource]="dataSource"
+  (queryParamsChange)="queryParams$.next($event)" />

@@ -1,0 +1,13 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <span> <i class="m-r-5 text-gray" nz-icon nzType="home"></i> </span>
+  </nz-breadcrumb-item>
+
+  <nz-breadcrumb-item *ngFor="let breadcrumb of breadcrumbs">
+    <a *ngIf="breadcrumb.url" [routerLink]="breadcrumb.url">
+      {{ breadcrumb.label }}
+    </a>
+
+    <span *ngIf="!breadcrumb.url">{{ breadcrumb.label }}</span>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>

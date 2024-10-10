@@ -1,0 +1,22 @@
+<div class="d-flex"></div>
+
+<div class="nav-bar__dropdown" nz-dropdown [nzDropdownMenu]="menu">
+  <div class="nav-bar__dropdown__profile-container">
+    <nz-avatar
+      class="nav-bar__dropdown__profile-container-avatar"
+      [nzText]="getFirstCharacter(user.name)"></nz-avatar>
+
+    <div class="nav-bar__dropdown__profile-container-name-holder">
+      <span>
+        {{ user.name }} <br />
+        <span>{{ user.role }}</span>
+      </span>
+    </div>
+  </div>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <a nz-menu-item routerLink="change-password"> Change password </a>
+      <a nz-menu-item routerLink="logout"> Logout </a>
+    </ul>
+  </nz-dropdown-menu>
+</div>

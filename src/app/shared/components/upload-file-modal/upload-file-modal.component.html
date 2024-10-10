@@ -1,0 +1,75 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  (nzOnCancel)="handleCancel()"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter">
+  <ng-template #modalTitle>Import {{ title | lowercase }}</ng-template>
+
+  <ng-template #modalContent>
+    <div class="import">
+      @for (file of defaultFile; track file.type) {
+        <p>
+          @if (file.type === 'sample') {
+            Import the list of {{ title | lowercase }} using an Excel file.
+          } @else {
+            {{ file?.label }}
+          }
+
+          <strong>
+            <a
+              tabindex="9"
+              (keydown.enter)="downloadFile(file)"
+              (click)="downloadFile(file)">
+              Download {{ file.type === 'sample' ? 'sample file' : '' }}.
+            </a>
+          </strong>
+        </p>
+      }
+
+      <div *ngIf="resultImport?.message">
+        <div
+          class="message message-{{
+            resultImport?.error_key ? 'error' : 'success'
+          }}">
+          {{ resultImport?.message }}
+        </div>
+        <div class="mb-2" *ngIf="resultImport?.error_key">
+          <a
+            tabindex="9"
+            (keydown.enter)="
+              downloadS3File(resultImport?.error_key, errorFileName)
+            "
+            (click)="downloadS3File(resultImport?.error_key, errorFileName)">
+            <strong>Download error file</strong>
+          </a>
+        </div>
+      </div>
+
+      <p>Select file (only .xlsx files can be uploaded)</p>
+      <nz-upload
+        [(nzFileList)]="fileList"
+        [nzCustomRequest]="dummyRequest"
+        [nzShowButton]="fileList.length !== 1"
+        nzAccept=".xlsx"
+        [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }">
+        <button nz-button>
+          <span nz-icon nzType="upload"></span>
+          Upload
+        </button>
+      </nz-upload>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="handleOk()"
+      [disabled]="deactiveOk"
+      [nzLoading]="isOkLoading">
+      Import
+    </button>
+  </ng-template>
+</nz-modal>

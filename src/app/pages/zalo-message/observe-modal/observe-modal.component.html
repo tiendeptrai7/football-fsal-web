@@ -1,0 +1,64 @@
+<nz-modal
+  nzTitle="Observe Zalo Messages"
+  nzWidth="600px"
+  [(nzVisible)]="isVisible"
+  (nzOnCancel)="handleClose()"
+  (nzOnOk)="handleOK()">
+  <ng-container *nzModalContent>
+    <div class="mb-3">
+      <span
+        >Please check all Zalo messages that have been read before signing the
+        confirmation.
+      </span>
+      <strong>Observe: {{ selectedNumber }}/{{ totalRecord }} messages</strong>
+    </div>
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+      <nz-form-item class="form-group">
+        <nz-form-label nzRequired>Comment</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            validateForm.value.comment ? nzInvalidType : nzErrorRequire
+          ">
+          <textarea
+            rows="4"
+            maxlength="1000"
+            name="comment"
+            nz-input
+            formControlName="comment"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="form-group">
+        <nz-form-label nzRequired>Username</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            validateForm.value.username ? nzInvalidType : nzErrorRequire
+          ">
+          <input name="username" nz-input formControlName="username" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="form-group">
+        <nz-form-label nzRequired>Password</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            validateForm.value.password ? nzInvalidType : nzErrorRequire
+          ">
+          <nz-input-group [nzSuffix]="suffixVisible">
+            <input
+              name="password"
+              [type]="isVisiblePassword ? 'text' : 'password'"
+              nz-input
+              formControlName="password" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<ng-template #suffixVisible>
+  <i
+    tabindex="0"
+    nz-icon
+    [nzType]="isVisiblePassword ? 'eye-invisible' : 'eye'"
+    (click)="isVisiblePassword = !isVisiblePassword"></i>
+</ng-template>

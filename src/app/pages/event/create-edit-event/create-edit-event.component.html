@@ -1,0 +1,286 @@
+<nz-card class="form-content" [nzExtra]="extraTemplate">
+  <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+    <div>
+      <h3 class="form-title">Event information</h3>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Event Name</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.name ? nzInvalidType : nzErrorRequire
+            ">
+            <input
+              class="form-control"
+              formControlName="name"
+              nz-input
+              name="name"
+              maxlength="1000" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label
+            nzRequired
+            nzTooltipTitle="The best image aspect ratio to display on mini app that would be 4:6."
+            nzTooltipIcon="info-circle">
+            Image
+          </nz-form-label>
+          <nz-form-control>
+            <file-upload
+              #imageUpload
+              [value]="validateForm.value.image_url"
+              [isError]="
+                !validateForm.controls.image_url.valid &&
+                !validateForm.controls.image_url.pristine
+              "></file-upload>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Start time</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.started_at ? nzInvalidType : nzErrorRequire
+            ">
+            <nz-date-picker
+              class="form-control w-100"
+              formControlName="started_at"
+              [nzFormat]="'HH:mm dd/MM/yyyy'"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              [nzDisabledDate]="disabledDateTimeLessThan().nzDisabledDate"
+              [nzDisabledTime]="disabledDateTimeLessThan().nzDisabledTime"
+              name="started_at"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>End time</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.ended_at ? nzInvalidType : nzErrorRequire
+            ">
+            <nz-date-picker
+              class="form-control w-100"
+              formControlName="ended_at"
+              [nzFormat]="'HH:mm dd/MM/yyyy'"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              [nzDisabled]="!validateForm.value.started_at || disabled"
+              [nzDisabledDate]="
+                disabledDateTimeLessThan(
+                  validateForm.value.started_at || undefined
+                ).nzDisabledDate
+              "
+              [nzDisabledTime]="
+                disabledDateTimeLessThan(
+                  validateForm.value.started_at || undefined
+                ).nzDisabledTime
+              "
+              name="ended_at"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Event location</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.location ? nzInvalidType : nzErrorRequire
+            ">
+            <input
+              class="form-control"
+              formControlName="location"
+              nz-input
+              name="location"
+              maxlength="2000" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="form-row">
+        <nz-form-item class="form-group mx-3">
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-switch formControlName="status"></nz-switch>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- <nz-form-item class="form-group">
+          <nz-form-label>Public Event</nz-form-label>
+          <nz-form-control>
+            <nz-switch formControlName="is_public"></nz-switch>
+          </nz-form-control>
+        </nz-form-item> -->
+      </div>
+
+      <div class="form-row">
+        <nz-form-item class="form-group col-12">
+          <nz-form-label
+            nzRequired
+            nzTooltipTitle="The best image aspect ratio to display on mini app that would be 4:6."
+            nzTooltipIcon="info-circle">
+            Event content
+          </nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.content ? nzInvalidType : nzErrorRequire
+            ">
+            <richtext
+              class="form-control"
+              formControlName="content"
+              name="content"
+              [disabled]="disabled"></richtext>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <nz-divider></nz-divider>
+
+    <div>
+      <h3 nz-typography>Event invitation</h3>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Send time setting</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              class="form-control w-100"
+              formControlName="invite_days_before"
+              name="invite_days_before"
+              [nzMin]="1"
+              [nzMax]="365"
+              [nzDisabled]="!validateForm.value.started_at || disabled"
+              (nzBlur)="onBlurSendTimeSetting()"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Sending time</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.invite_send_at ? nzInvalidType : nzErrorRequire
+            ">
+            <nz-date-picker
+              class="form-control w-100"
+              formControlName="invite_send_at"
+              [nzFormat]="'HH:mm dd/MM/yyyy'"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              [nzDisabled]="!validateForm.value.started_at || disabled"
+              [nzDisabledDate]="
+                disabledDateTimeMoreThan(
+                  validateForm.value.started_at || undefined
+                ).nzDisabledDate
+              "
+              [nzDisabledTime]="
+                disabledDateTimeMoreThan(
+                  validateForm.value.started_at || undefined
+                ).nzDisabledTime
+              "
+              name="invite_send_at"
+              (nzOnOpenChange)="onBlurSendTimeAt($event)"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Expired time setting</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              class="form-control w-100"
+              formControlName="invite_expire_days"
+              name="invite_expire_days"
+              [nzMin]="1"
+              [nzMax]="365"
+              [nzDisabled]="!validateForm.value.invite_send_at || disabled"
+              (nzBlur)="onBlurExpiredTimeSetting()"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Expired time</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.invite_expire_at
+                ? nzInvalidType
+                : nzErrorRequire
+            ">
+            <nz-date-picker
+              class="form-control w-100"
+              formControlName="invite_expire_at"
+              [nzFormat]="'HH:mm dd/MM/yyyy'"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              [nzDisabled]="!validateForm.value.invite_send_at || disabled"
+              [nzDisabledDate]="
+                disabledDateTimeLessThan(
+                  validateForm.value.invite_send_at || undefined
+                ).nzDisabledDate
+              "
+              [nzDisabledTime]="
+                disabledDateTimeLessThan(
+                  validateForm.value.invite_send_at || undefined
+                ).nzDisabledTime
+              "
+              name="invite_expire_at"
+              (nzOnOpenChange)="onBlurExpiredTimeAt($event)"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <nz-divider></nz-divider>
+
+    <div>
+      <h3 nz-typography>Reminder Configuration</h3>
+      <div>
+        <div class="position-relative">
+          <ng-container formArrayName="reminders">
+            <div
+              class="position-relative"
+              *ngFor="let reminder of reminders.controls; let i = index">
+              <app-create-edit-reminder
+                [event]="event"
+                [disabled]="disabled"
+                [formGroup]="getGroup(i)"></app-create-edit-reminder>
+              <button
+                style="top: 10px; right: 10px; z-index: 1"
+                nz-button
+                nzDanger
+                nzType="text"
+                class="position-absolute"
+                (click)="deleteReminder(i)">
+                <span nz-icon nzType="close" nzTheme="outline"></span>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+        <div>
+          <button
+            nz-button
+            nzType="primary"
+            [disabled]="!this.validateForm.value.started_at || disabled"
+            (click)="addReminder()">
+            <i nz-icon nzType="plus" nzTheme="outline"></i>Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <button class="mr-4" nz-button nzType="primary" (click)="goBack()">
+    <i nz-icon nzType="rollback" nzTheme="outline"></i>Back
+  </button>
+
+  <button nz-button nzType="default" (click)="save()">
+    <i nz-icon nzType="save" theme="outline"></i>
+    <span>Save</span>
+  </button>
+</ng-template>
+
+<!-- demo form question config
+<app-question-config-modal
+  [isVisible]="isVisible"
+  [vm]="vm"></app-question-config-modal> -->

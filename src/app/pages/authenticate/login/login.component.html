@@ -1,0 +1,123 @@
+<div class="container-fluid h-100 page-login">
+  <div class="d-flex h-100 p-v-15 flex-column justify-content-between">
+    <div class="d-none d-md-flex p-h-40">
+      <img
+        class="logo-main"
+        ngSrc="./assets/images/logo/logo.png"
+        alt=""
+        height="422"
+        width="642" />
+    </div>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-5">
+          <nz-card>
+            <h2 class="m-t-20">Login</h2>
+            <p class="m-b-30">Enter your credentials to gain access.</p>
+            <form
+              nz-form
+              [formGroup]="validateForm"
+              autocomplete="off"
+              nzLayout="vertical"
+              class="login-form"
+              (ngSubmit)="login()">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="userName"
+                  >Username</nz-form-label
+                >
+                <nz-form-control
+                  [nzErrorTip]="
+                    !validateForm.value.username ? nzErrorRequire : ''
+                  ">
+                  <nz-input-group [nzPrefix]="prefixUser">
+                    <input
+                      type="text"
+                      nz-input
+                      formControlName="username"
+                      placeholder="Username"
+                      autocomplete="off"
+                      required />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item class="relative">
+                <nz-form-label nzRequired nzFor="password"
+                  >Password</nz-form-label
+                >
+                <nz-form-control
+                  [nzErrorTip]="
+                    !validateForm.value.password ? nzErrorRequire : ''
+                  ">
+                  <nz-input-group
+                    [nzPrefix]="prefixLock"
+                    [nzSuffix]="suffixVisible">
+                    <input
+                      [type]="isVisiblePassword ? 'text' : 'password'"
+                      nz-input
+                      formControlName="password"
+                      placeholder="Password"
+                      name="password"
+                      required />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+
+              <div
+                *ngIf="validateForm.invalid && errorMsg"
+                class="ant-form-item-explain m-b-5">
+                <div class="ant-form-item-explain-error">
+                  {{ errorMsg }}
+                </div>
+              </div>
+
+              <nz-form-item>
+                <nz-form-control>
+                  <div
+                    class="d-flex align-items-center justify-content-between">
+                    <label
+                      class="font-size-13 text-muted"
+                      nz-checkbox
+                      [(ngModel)]="rememberMe"
+                      [ngModelOptions]="{ standalone: true }">
+                      Remember login information.
+                    </label>
+                    <button
+                      nz-button
+                      class="login-form-button"
+                      [nzType]="'primary'">
+                      Login
+                    </button>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </form>
+            <ng-template #prefixUser><i nz-icon nzType="user"></i></ng-template>
+            <ng-template #prefixLock><i nz-icon nzType="lock"></i></ng-template>
+            <ng-template #suffixVisible>
+              <i
+                tabindex="0"
+                nz-icon
+                [nzType]="isVisiblePassword ? 'eye-invisible' : 'eye'"
+                (click)="isVisiblePassword = !isVisiblePassword"></i>
+            </ng-template>
+            <div>
+              <a [routerLink]="['/forgot-password']">Forgot password?</a>
+            </div>
+          </nz-card>
+        </div>
+        <div class="offset-md-1 col-md-6 d-none d-md-block">
+          <img
+            class="img-fluid"
+            priority="low"
+            ngSrc="./assets/images/others/login.png"
+            alt=""
+            height="1540"
+            width="2066" />
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-md-flex p-h-40 justify-content-between">
+      <span class="">© 2024 Novo Nordisk</span>
+    </div>
+  </div>
+</div>

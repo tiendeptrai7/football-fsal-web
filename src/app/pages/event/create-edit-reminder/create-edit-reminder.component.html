@@ -1,0 +1,80 @@
+<nz-card class="form-content">
+  <form nz-form [formGroup]="formGroup" nzLayout="vertical">
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label>Send time setting</nz-form-label>
+        <nz-form-control>
+          <nz-input-number
+            class="form-control w-100"
+            formControlName="reminder_days_before"
+            name="reminder_days_before"
+            [nzMin]="1"
+            [nzMax]="30"
+            [nzDisabled]="disabled"
+            (nzBlur)="onBlurSendTimeSetting()"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Sending time</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            formGroup.value.reminder_sent_at ? nzInvalidType : nzErrorRequire
+          ">
+          <nz-date-picker
+            class="form-control w-100"
+            formControlName="reminder_sent_at"
+            [nzFormat]="'HH:mm dd/MM/yyyy'"
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            name="reminder_sent_at"
+            [nzDisabled]="disabled"
+            [nzDisabledDate]="
+              disabledDateTimeMoreThan(event?.started_at).nzDisabledDate
+            "
+            [nzDisabledTime]="
+              disabledDateTimeMoreThan(event?.started_at).nzDisabledTime
+            "
+            (nzOnOpenChange)="onBlurSendTimeAt($event)"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label>Expired time setting</nz-form-label>
+        <nz-form-control>
+          <nz-input-number
+            class="form-control w-100"
+            formControlName="reminder_expire_days"
+            name="reminder_expire_days"
+            [nzMin]="1"
+            [nzMax]="30"
+            [nzDisabled]="!formGroup.value.reminder_sent_at || disabled"
+            (nzBlur)="onBlurExpiredTimeSetting()"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Expired time</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            formGroup.value.reminder_expire_at ? nzInvalidType : nzErrorRequire
+          ">
+          <nz-date-picker
+            class="form-control w-100"
+            formControlName="reminder_expire_at"
+            [nzFormat]="'HH:mm dd/MM/yyyy'"
+            [nzDisabled]="!formGroup.value.reminder_sent_at || disabled"
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            [nzDisabledDate]="
+              disabledDateTimeLessThan(formGroup.value?.reminder_sent_at)
+                .nzDisabledDate
+            "
+            [nzDisabledTime]="
+              disabledDateTimeLessThan(formGroup.value?.reminder_sent_at)
+                .nzDisabledTime
+            "
+            name="reminder_expire_at"
+            (nzOnOpenChange)="onBlurExpiredTimeAt($event)"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+</nz-card>

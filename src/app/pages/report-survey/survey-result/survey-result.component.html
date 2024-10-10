@@ -1,0 +1,61 @@
+<div class="mb-3">
+  <div class="my-3">
+    <h4
+      style="
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      "
+      [nzTooltipTitle]="survey?.name"
+      nzTooltipPlacement="left"
+      nz-tooltip
+      nz-typography>
+      {{ survey?.name }}
+    </h4>
+  </div>
+</div>
+
+<div style="margin-top: 20px">
+  <h4>Overview</h4>
+  <div
+    style="display: flex; justify-content: center; align-items: center"
+    class="card border rounded p-3">
+    <donut-chart></donut-chart>
+  </div>
+</div>
+<div style="margin-top: 20px">
+  <h4>Detail</h4>
+  <div
+    class="card border rounded p-3"
+    *ngFor="let data of dataDetail; let i = index">
+    <label>Question {{ i + 1 }} : {{ data.question_content }}</label>
+    <div
+      style="display: flex; justify-content: center; align-items: center"
+      *ngIf="
+        data.question_type === questionTypes.multi_choice ||
+        data.question_type === questionTypes.single_choice
+      ">
+      <bar-chart
+        [question_id]="data.question_id"
+        [survey_id]="survey_id"></bar-chart>
+    </div>
+    <div
+      style="display: flex; justify-content: center; align-items: center"
+      *ngIf="data.question_type === questionTypes.text">
+      <short-answer
+        [question_id]="data.question_id"
+        [survey_id]="survey_id"></short-answer>
+    </div>
+    <div
+      style="display: flex; justify-content: center; align-items: center"
+      *ngIf="
+        data.question_type === questionTypes.percentage ||
+        data.question_type === questionTypes.rating
+      ">
+      <line-chart
+        [question_id]="data.question_id"
+        [survey_id]="survey_id"></line-chart>
+    </div>
+  </div>
+</div>

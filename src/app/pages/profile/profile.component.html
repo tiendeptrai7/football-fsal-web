@@ -1,0 +1,27 @@
+<nz-card class="form-content">
+  <div class="main-body p-x-25">
+    <div class="row">
+      <div class="col-lg-12">
+        <div
+          class="d-flex flex-column align-items-center text-center justify-content-center">
+          <nz-avatar
+            class="font-size-75"
+            [nzSize]="150"
+            [nzText]="
+              getFirstCharacter(user.profile.full_name || user.username)
+            " />
+          <div class="mt-3">
+            <p class="text-secondary mb-1">
+              Full Name: {{ user.profile.full_name }}
+            </p>
+            <p class="text-secondary mb-1">Username: {{ user.username }}</p>
+            <p class="text-secondary mb-1">Email: {{ user.email }}</p>
+            <p class="text-secondary mb-1" *ngIf="user.profile.phone">
+              Phone Number: {{ user.profile.phone }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-card>

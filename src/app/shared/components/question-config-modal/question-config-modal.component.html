@@ -1,0 +1,120 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  (nzOnCancel)="handleCancel()"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzMaskClosable]="true"
+  [nzFooter]="modalFooter"
+  nzWidth="60%">
+  <ng-template #modalTitle>{{ title }}</ng-template>
+
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Format</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="getFormControlError(validateForm.get('type'))">
+            <nz-select
+              class="form-control"
+              nzPlaceHolder="Format"
+              formControlName="type"
+              (ngModelChange)="onChangeFormat($event)"
+              name="type">
+              <nz-option
+                *ngFor="let option of questionTypeOptions"
+                [nzLabel]="option.name"
+                [nzValue]="option.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Required</nz-form-label>
+          <nz-form-control>
+            <nz-switch formControlName="is_required"></nz-switch>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-12">
+          <nz-form-label nzRequired>Question </nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="getFormControlError(validateForm.get('content'))">
+            <textarea
+              formControlName="content"
+              class="form-control"
+              rows="2"
+              placeholder="What would you like to ask?"
+              nz-input
+              name="content"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <ng-container
+        *ngIf="
+          validateForm.value.type === EQuestionType.multi_choice ||
+          validateForm.value.type === EQuestionType.single_choice
+        "
+        formArrayName="answers">
+        <div
+          class="form-row"
+          *ngFor="let item of frmAnswers.controls; let i = index">
+          <ng-container [formGroupName]="i">
+            <nz-form-item class="form-group col-md-8">
+              <nz-form-control
+                [nzErrorTip]="getFormControlError(item.get('content'))">
+                <input
+                  class="form-control"
+                  nz-input
+                  formControlName="content"
+                  placeholder="Add option"
+                  name="content" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item class="form-group col-md-2">
+              <nz-form-control>
+                <label
+                  nz-checkbox
+                  (nzCheckedChange)="onChangeRequireInput(i)"
+                  [nzChecked]="item.value.require_input === 1"
+                  >Input text</label
+                >
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item class="form-group col-md-2">
+              <button
+                class="m-r-5"
+                nz-button
+                nzType="default"
+                nzShape="circle"
+                nz-tooltip
+                nzTooltipTitle="Delete"
+                nz-popconfirm
+                [nzPopconfirmTitle]="'Do you want to delete ?'"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="deleteItemAnswer(i)">
+                <i nz-icon nzType="delete" theme="outline"></i>
+              </button>
+            </nz-form-item>
+          </ng-container>
+        </div>
+
+        <button
+          class="form-group ml-1"
+          nz-button
+          nzType="primary"
+          (click)="addItemAnswer()">
+          <i nz-icon nzType="plus" nzTheme="outline"></i>Add
+        </button>
+      </ng-container>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Submit</button>
+  </ng-template>
+</nz-modal>

@@ -1,0 +1,220 @@
+<nz-card class="form-content" [nzExtra]="extraTemplate">
+  <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+    <div>
+      <h3>Feedback Information</h3>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Event</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.event_id ? nzInvalidType : nzErrorRequire
+            ">
+            <lazy-select
+              placeholder="Select event"
+              [dataSource]="lazyEventSource"
+              formControlName="event_id"></lazy-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Feedback Name</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.name ? nzInvalidType : nzErrorRequire
+            ">
+            <input
+              class="form-control"
+              formControlName="name"
+              nz-input
+              [maxlength]="255"
+              name="name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-switch formControlName="status"></nz-switch>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div>
+      <h3>Configuration</h3>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Send time setting</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              class="form-control w-100"
+              formControlName="feedback_days_before"
+              name="feedback_days_before"
+              [nzMin]="1"
+              [nzMax]="365"
+              (nzBlur)="onBlurSendTimeSetting()"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Sending time</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.feedback_send_at
+                ? nzInvalidType
+                : nzErrorRequire
+            ">
+            <nz-date-picker
+              class="form-control w-100"
+              formControlName="feedback_send_at"
+              name="feedback_send_at"
+              [nzFormat]="'HH:mm dd/MM/yyyy'"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              [nzDisabledDate]="
+                disabledDateTimeLessThan(selectedEvent?.started_at)
+                  .nzDisabledDate
+              "
+              [nzDisabledTime]="
+                disabledDateTimeLessThan(selectedEvent?.started_at)
+                  .nzDisabledTime
+              "
+              (nzOnOpenChange)="onBlurSendTimeAt($event)"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Expired time setting</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              class="form-control w-100"
+              formControlName="feedback_expire_days"
+              name="feedback_expire_days"
+              [nzMin]="1"
+              [nzMax]="365"
+              (nzBlur)="onBlurExpiredTimeSetting()"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Expired Time</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.feedback_expire_at
+                ? nzInvalidType
+                : nzErrorRequire
+            ">
+            <nz-date-picker
+              class="form-control w-100"
+              formControlName="feedback_expire_at"
+              [nzFormat]="'HH:mm dd/MM/yyyy'"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              name="feedback_expire_at"
+              [nzDisabledDate]="
+                disabledDateTimeLessThan(validateForm.value.feedback_send_at)
+                  .nzDisabledDate
+              "
+              [nzDisabledTime]="
+                disabledDateTimeLessThan(validateForm.value.feedback_send_at)
+                  .nzDisabledTime
+              "
+              (nzOnOpenChange)="onBlurExpiredTimeAt($event)"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Upload Document</nz-form-label>
+          <nz-form-control>
+            <file-upload-multi
+              #documentsUpload
+              [type]="uploadType"
+              [isDisable]="isDisable"
+              [value]="validateForm.value.documents_urls" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div>
+      <h3>Feedback Form</h3>
+      <div>
+        <ng-container
+          *ngFor="
+            let form_question of validateForm.get('form_questions')?.value;
+            let i = index
+          ">
+          <div class="mb-3 p-3 border rounded">
+            <nz-form-label [nzRequired]="!!form_question.question.is_required"
+              >Question {{ i + 1 }}:</nz-form-label
+            >
+            <div class="row">
+              <div class="col-8">
+                <p nz-typography>
+                  Type: {{ getNameByValue(form_question.question.type) }}
+                </p>
+                <p nz-typography>{{ form_question.question.content }}</p>
+              </div>
+              <div class="col-4">
+                <div class="d-flex justify-content-center">
+                  <button
+                    class="m-r-5"
+                    nz-button
+                    nzType="default"
+                    nzShape="circle"
+                    [disabled]="isDisable"
+                    (click)="editQuestion(i)">
+                    <i nz-icon nzType="edit" theme="outline"></i>
+                  </button>
+                  <button
+                    class="m-r-5"
+                    nz-button
+                    nzType="default"
+                    nzShape="circle"
+                    nz-tooltip
+                    nzTooltipTitle="Delete"
+                    nz-popconfirm
+                    [disabled]="isDisable"
+                    [nzPopconfirmTitle]="'Do you want to delete ?'"
+                    nzPopconfirmPlacement="bottom"
+                    (nzOnConfirm)="deleteQuestion(i)">
+                    <i nz-icon nzType="delete" theme="outline"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div>
+        <button
+          nz-button
+          nzType="primary"
+          [disabled]="isDisable"
+          (click)="addQuestion()">
+          <i nz-icon nzType="plus" nzTheme="outline"></i>Add question
+        </button>
+      </div>
+    </div>
+  </form>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <button class="mr-4" nz-button nzType="primary" (click)="goBack()">
+    <i nz-icon nzType="rollback" nzTheme="outline"></i>Back
+  </button>
+
+  <button
+    nz-button
+    nzType="default"
+    [disabled]="isDisable"
+    [nzLoading]="saveLoading"
+    (click)="save()">
+    <i nz-icon nzType="save" theme="outline"></i>
+    <span>Save</span>
+  </button>
+</ng-template>
+
+@if (isVisibleQuestionModal) {
+  <app-question-config-modal
+    [(isVisible)]="isVisibleQuestionModal"
+    [vm]="questionEdit?.question ?? null"
+    (isVisibleChange)="handleCloseQuestionModal($event)"
+    (submitQuestion)="handleSubmitQuestion($event)"></app-question-config-modal>
+}

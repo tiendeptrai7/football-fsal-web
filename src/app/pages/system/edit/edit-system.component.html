@@ -1,0 +1,107 @@
+<nz-card class="form-content" [nzExtra]="extraTemplate">
+  <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label>Type</nz-form-label>
+        <nz-form-control>
+          <input
+            class="form-control"
+            formControlName="group"
+            nz-input
+            [disabled]="true"
+            name="group" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label>Key</nz-form-label>
+        <nz-form-control>
+          <input
+            class="form-control"
+            formControlName="key"
+            nz-input
+            [disabled]="true"
+            name="key" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label>Name</nz-form-label>
+        <nz-form-control>
+          <input
+            class="form-control"
+            formControlName="name"
+            nz-input
+            [disabled]="true"
+            name="name" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Value</nz-form-label>
+        <nz-form-control [nzErrorTip]="nzErrorRequire">
+          @switch (unit) {
+            @case (ESystemType.textarea) {
+              <textarea
+                class="form-control"
+                rows="6"
+                formControlName="value"
+                nz-input
+                name="value"></textarea>
+            }
+            @case (ESystemType.password) {
+              <nz-input-group
+                class="form-control w-100"
+                [nzSuffix]="suffixTemplate">
+                <input
+                  class="form-control"
+                  [type]="passwordVisible ? 'text' : 'password'"
+                  placeholder="Enter password"
+                  formControlName="value"
+                  nz-input
+                  name="value" />
+              </nz-input-group>
+              <ng-template #suffixTemplate>
+                <span
+                  nz-icon
+                  tabindex=""
+                  [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                  (keyup.enter)="passwordVisible = !passwordVisible"
+                  (click)="passwordVisible = !passwordVisible"></span>
+              </ng-template>
+            }
+            @case (ESystemType.file) {
+              <file-upload
+                #imageUpload
+                [value]="validateForm.value.value?.[0]"></file-upload>
+            }
+            @default {
+              <input
+                [type]="
+                  validateForm.value.unit === ESystemType.number
+                    ? 'number'
+                    : 'text'
+                "
+                placeholder="Enter value"
+                class="form-control"
+                formControlName="value"
+                nz-input
+                name="value" />
+            }
+          }
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <button class="mr-4" nz-button nzType="primary" (click)="goBack()">
+    <i nz-icon nzType="rollback" nzTheme="outline"></i>Back
+  </button>
+
+  <button nz-button nzType="default" (click)="save()">
+    <i nz-icon nzType="save" theme="outline"></i>
+    <span>Save</span>
+  </button>
+</ng-template>

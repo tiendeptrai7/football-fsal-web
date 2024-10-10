@@ -1,0 +1,12 @@
+<action-bar
+  [filters]="filters"
+  [actions]="actions"
+  [hideBtnApply]="true"
+  [hideBtnReset]="true"
+  (queryParamsChange)="queryParams$.next($event)" />
+<data-table
+  [isAction]="true"
+  [editAction]="editAction"
+  [headers]="headers"
+  [dataSource]="dataSource"
+  (queryParamsChange)="queryParams$.next($event)" />

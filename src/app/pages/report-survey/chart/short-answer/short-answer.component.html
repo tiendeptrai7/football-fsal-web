@@ -1,0 +1,13 @@
+<div>
+  <div
+    style="margin-bottom: 20px"
+    *ngFor="let answer of dataSourceLimit; let i = index">
+    <input nz-input [value]="answer.answer_text" readonly />
+  </div>
+
+  <div>
+    <button nz-button nzType="primary" (click)="showMore()">
+      Show more answer
+    </button>
+  </div>
+</div>

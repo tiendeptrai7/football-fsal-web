@@ -1,0 +1,83 @@
+<nz-card class="form-content" [nzExtra]="extraTemplate">
+  <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Title</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="getFormControlError(validateForm.get('title'))">
+          <input
+            class="form-control"
+            nz-input
+            name="title"
+            formControlName="title" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Publish At</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="getFormControlError(validateForm.get('published_at'))">
+          <nz-date-picker
+            class="form-control w-100"
+            formControlName="published_at"
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            [nzFormat]="'YYYY-MM-dd HH:mm'"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label
+          nzRequired
+          nzTooltipTitle="The best image aspect ratio to display on mini app that would be 4:6."
+          nzTooltipIcon="info-circle">
+          Cover Image
+        </nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="getFormControlError(validateForm.get('thumbnail'))">
+          <file-upload
+            #imageUpload
+            [value]="validateForm.value.thumbnail"
+            [isError]="
+              !validateForm.controls.thumbnail.valid &&
+              !validateForm.controls.thumbnail.pristine
+            "></file-upload>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="form-group col-md-4">
+        <nz-form-label nzRequired>Status</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="status"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <nz-form-item class="form-group">
+      <nz-form-label
+        nzRequired
+        nzTooltipTitle="The best image aspect ratio to display on mini app that would be 4:6."
+        nzTooltipIcon="info-circle">
+        Content
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="getFormControlError(validateForm.get('content'))">
+        <richtext
+          class="form-control"
+          formControlName="content"
+          name="content"></richtext>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <button class="mr-4" nz-button nzType="primary" (click)="goBack()">
+    <i nz-icon nzType="rollback" nzTheme="outline"></i>Back
+  </button>
+
+  <button nz-button nzType="default" (click)="save()">
+    <i nz-icon nzType="save" theme="outline"></i>
+    <span>Save</span>
+  </button>
+</ng-template>

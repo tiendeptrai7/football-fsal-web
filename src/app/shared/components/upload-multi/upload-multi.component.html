@@ -1,0 +1,17 @@
+<div class="clearfix">
+  <nz-upload
+    [class.upload-error]="isError"
+    [nzDisabled]="isDisable"
+    [nzMultiple]="true"
+    [nzAccept]="type"
+    [nzFileType]="type"
+    [nzSize]="maxSize"
+    [nzCustomRequest]="dummyRequest"
+    [nzListType]="nzListType"
+    [(nzFileList)]="fileList">
+    <button nz-button>
+      <span nz-icon nzType="upload"></span>
+      Upload
+    </button>
+  </nz-upload>
+</div>

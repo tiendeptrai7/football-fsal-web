@@ -1,0 +1,99 @@
+<div class="mb-3">
+  <a class="text-primary" [routerLink]="['/hcps']">
+    <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+    Back to HCP Management
+  </a>
+</div>
+
+<div>
+  <h3>HCP information</h3>
+  <div class="p-3">
+    <div class="row">
+      <div class="col-md-6">
+        <nz-form-label>HCP ID</nz-form-label>
+        <input nz-input value="{{ hcp?.code }}" disabled />
+      </div>
+      <div class="col-md-6">
+        <nz-form-label>HCP Name</nz-form-label>
+        <input nz-input value="{{ hcp?.name }}" disabled />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <nz-form-label>Zalo Phone Number</nz-form-label>
+        <input nz-input value="{{ hcp?.user?.profile?.phone }}" disabled />
+      </div>
+      <div class="col-md-6">
+        <nz-form-label>HCP Type</nz-form-label>
+        <input nz-input value="{{ getHcpType(hcp?.type) }}" disabled />
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <h3>More information</h3>
+  <div class="p-3">
+    <div class="row">
+      <div class="col-md-6">
+        <nz-form-label>Phone number</nz-form-label>
+        <input nz-input value="{{ hcp?.phone }}" disabled />
+      </div>
+      <div class="col-md-6">
+        <nz-form-label>Prefix</nz-form-label>
+        <input nz-input value="{{ hcp?.prefix }}" disabled />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <nz-form-label>DOB</nz-form-label>
+        <input nz-input value="{{ hcp?.dob | date: 'yyyy-MM-dd' }}" disabled />
+      </div>
+      <div class="col-md-6">
+        <nz-form-label>Gender</nz-form-label>
+        <input
+          nz-input
+          value="{{ hcp?.gender || '' | capitalizeFirst }}"
+          disabled />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <nz-form-label>HCO</nz-form-label>
+        <input nz-input value="{{ hcp?.hco?.name }}" disabled />
+      </div>
+      <div class="col-md-6">
+        <nz-form-label>Specialty</nz-form-label>
+        <input nz-input value="{{ hcp?.specialty }}" disabled />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <nz-form-label>Referral by</nz-form-label>
+        <input nz-input value="{{ hcp?.ref?.name }}" disabled />
+      </div>
+      <div class="col-md-6">
+        <nz-form-label>City</nz-form-label>
+        <input nz-input value="{{ hcp?.city }}" disabled />
+      </div>
+    </div>
+    <div>
+      <nz-form-label>Attended event</nz-form-label>
+      <nz-table #basicTable [nzData]="eventJoined">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Event Name</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.checked_in_at | date: 'yyyy-MM-dd HH:mm' }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

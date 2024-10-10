@@ -1,0 +1,156 @@
+<nz-card class="form-content" [nzExtra]="extraTemplate">
+  <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+    <div>
+      <h3>Survey Information</h3>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Event</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.event_id ? nzInvalidType : nzErrorRequire
+            ">
+            <lazy-select
+              placeholder="Select event"
+              [dataSource]="lazyEventSource"
+              formControlName="event_id"></lazy-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="form-row">
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label nzRequired>Survey Name</nz-form-label>
+          <nz-form-control
+            [nzErrorTip]="
+              validateForm.value.name ? nzInvalidType : nzErrorRequire
+            ">
+            <input
+              class="form-control"
+              formControlName="name"
+              nz-input
+              [maxlength]="255"
+              name="name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="form-group col-md-6">
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-switch formControlName="status"></nz-switch>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div class="form-row">
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>Start Time</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="getFormControlError(validateForm.get('started_at'))">
+          <nz-date-picker
+            class="form-control w-100"
+            formControlName="started_at"
+            [nzFormat]="'HH:mm dd/MM/yyyy'"
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            [nzDisabledDate]="disabledDateTimeLessThan().nzDisabledDate"
+            [nzDisabledTime]="disabledDateTimeLessThan().nzDisabledTime"
+            name="started_at"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="form-group col-md-6">
+        <nz-form-label nzRequired>End Time</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="getFormControlError(validateForm.get('ended_at'))">
+          <nz-date-picker
+            class="form-control w-100"
+            formControlName="ended_at"
+            [nzFormat]="'HH:mm dd/MM/yyyy'"
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            [nzDisabled]="!validateForm.value.started_at"
+            [nzDisabledDate]="
+              disabledDateTimeLessThan(
+                validateForm.value.started_at || undefined
+              ).nzDisabledDate
+            "
+            [nzDisabledTime]="
+              disabledDateTimeLessThan(
+                validateForm.value.started_at || undefined
+              ).nzDisabledTime
+            "
+            name="ended_at"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div>
+      <h3>Survey Form</h3>
+      <div>
+        <ng-container
+          *ngFor="
+            let form_question of validateForm.get('form_questions')?.value;
+            let i = index
+          ">
+          <div class="mb-3 p-3 border rounded">
+            <nz-form-label [nzRequired]="!!form_question.question.is_required"
+              >Question {{ i + 1 }}:</nz-form-label
+            >
+            <div class="row">
+              <div class="col-8">
+                <p nz-typography>
+                  Type: {{ getNameByValue(form_question.question.type) }}
+                </p>
+                <p nz-typography>{{ form_question.question.content }}</p>
+              </div>
+              <div class="col-4">
+                <div class="d-flex justify-content-center">
+                  <button
+                    class="m-r-5"
+                    nz-button
+                    nzType="default"
+                    nzShape="circle"
+                    (click)="editQuestion(i)">
+                    <i nz-icon nzType="edit" theme="outline"></i>
+                  </button>
+                  <button
+                    class="m-r-5"
+                    nz-button
+                    nzType="default"
+                    nzShape="circle"
+                    nz-tooltip
+                    nzTooltipTitle="Delete"
+                    nz-popconfirm
+                    [nzPopconfirmTitle]="'Do you want to delete ?'"
+                    nzPopconfirmPlacement="bottom"
+                    (nzOnConfirm)="deleteQuestion(i)">
+                    <i nz-icon nzType="delete" theme="outline"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div>
+        <button nz-button nzType="primary" (click)="addQuestion()">
+          <i nz-icon nzType="plus" nzTheme="outline"></i>Add question
+        </button>
+      </div>
+    </div>
+  </form>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <button class="mr-4" nz-button nzType="primary" (click)="goBack()">
+    <i nz-icon nzType="rollback" nzTheme="outline"></i>Back
+  </button>
+
+  <button nz-button nzType="default" (click)="save()">
+    <i nz-icon nzType="save" theme="outline"></i>
+    <span>Save</span>
+  </button>
+</ng-template>
+
+@if (isVisibleQuestionModal) {
+  <app-question-config-modal
+    [(isVisible)]="isVisibleQuestionModal"
+    [vm]="questionEdit?.question ?? null"
+    (submitQuestion)="handleSubmitQuestion($event)"></app-question-config-modal>
+}

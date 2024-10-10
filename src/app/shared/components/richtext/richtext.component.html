@@ -1,0 +1,205 @@
+<span class="data-field" *ngIf="isDisabled">
+  <p [innerHTML]="value | safeHtml"></p>
+</span>
+
+<div *ngIf="!isDisabled">
+  <textarea
+    [id]="editorId"
+    rows="10"
+    cols="30"
+    [ngStyle]="{ height: heightValue }"
+    class="d-none"
+    aria-label="editor">
+  </textarea>
+</div>
+
+<nz-modal
+  [(nzVisible)]="visibleInsertLink"
+  nzTitle="Insert Link"
+  nzCentered
+  (nzOnCancel)="visibleInsertLink = false"
+  (nzOnOk)="insertLink()">
+  <ng-container *nzModalContent>
+    <form #formInsertLink="ngForm" nz-form [nzLayout]="'vertical'" class="my-3">
+      <div class="card p-3">
+        <div class="row">
+          <div class="col-12 mb-3">
+            <nz-radio-group
+              name="linkisLink"
+              [(ngModel)]="vmLink.isLink"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="typeLinkChange()">
+              <label nz-radio [nzValue]="true">Enter URL</label>
+              <label nz-radio [nzValue]="false">Attach File</label>
+            </nz-radio-group>
+          </div>
+          <div class="col-12 mb-3" *ngIf="vmLink.isLink; else upload">
+            <input
+              nz-input
+              name="linklink"
+              type="text"
+              [(ngModel)]="vmLink.link"
+              [ngModelOptions]="{ standalone: true }"
+              required
+              maxlength="2048" />
+          </div>
+          <ng-template #upload>
+            <div class="col-12 mb-3">
+              <input
+                nz-input
+                name="linkfile"
+                type="file"
+                (change)="fileLinkSelected($event)"
+                required
+                accept=" .doc, .docx, .xlsx, .xls, .pdf, image/*" />
+            </div>
+          </ng-template>
+          <div class="col-12 mb-3">
+            <label>Text</label>
+            <input
+              nz-input
+              name="linktext"
+              type="text"
+              [(ngModel)]="vmLink.text"
+              [ngModelOptions]="{ standalone: true }"
+              required
+              maxlength="2048" />
+          </div>
+          <div class="col-12 mb-3">
+            <label>Tooltip</label>
+            <input
+              nz-input
+              name="linktoolTip"
+              type="text"
+              [(ngModel)]="vmLink.toolTip"
+              [ngModelOptions]="{ standalone: true }"
+              maxlength="2048" />
+          </div>
+          <div class="col-12 mb-3">
+            <label
+              nz-checkbox
+              name="isNewTab"
+              [(ngModel)]="vmLink.isNewTab"
+              [ngModelOptions]="{ standalone: true }"
+              >Open link in a new tab</label
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="visibleInsertImage"
+  nzTitle="Insert Image"
+  nzCentered
+  (nzOnCancel)="visibleInsertImage = false"
+  (nzOnOk)="insertImage()">
+  <ng-container *nzModalContent>
+    <form
+      #formInsertImage="ngForm"
+      nz-form
+      [nzLayout]="'vertical'"
+      class="my-3">
+      <div class="row">
+        <div class="col-12 mb-3">
+          <nz-radio-group
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="vmImage.isLink"
+            (ngModelChange)="typeImageChange()">
+            <label nz-radio [nzValue]="true">Enter URL</label>
+            <label nz-radio [nzValue]="false">
+              Upload Image
+              <span style="opacity: 0.5; padding-left: 5px">
+                (Max-width: 1080px, 5MB)
+              </span>
+            </label>
+          </nz-radio-group>
+        </div>
+        <div class="col-12" *ngIf="vmImage.isLink; else upload">
+          <input
+            nz-input
+            name="link"
+            type="text"
+            [(ngModel)]="vmImage.link"
+            required
+            maxlength="2048" />
+        </div>
+        <ng-template #upload>
+          <div class="col-12">
+            <input
+              nz-input
+              name="file"
+              type="file"
+              (change)="fileImageSelected($event)"
+              required
+              accept="image/*" />
+          </div>
+        </ng-template>
+        <div class="col-12 mt-3">
+          <label>Description</label>
+          <input
+            nz-input
+            name="alt"
+            type="text"
+            [(ngModel)]="vmImage.alt"
+            maxlength="2048" />
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="visibleInsertVideo"
+  nzTitle="Insert Video"
+  nzCentered
+  (nzOnCancel)="visibleInsertVideo = false"
+  (nzOnOk)="insertVideo()">
+  <ng-container *nzModalContent>
+    <form #formInsertVideo nz-form [nzLayout]="'vertical'" class="my-3">
+      <div class="row">
+        <div class="col-12 mb-3">
+          <label>YouTube or Vimeo Link</label>
+          <input
+            nz-input
+            class="w-100"
+            type="text"
+            [(ngModel)]="linkVideo"
+            [ngModelOptions]="{ standalone: true }"
+            name="linkVideo"
+            placeholder="YouTube or Vimeo link" />
+        </div>
+        <div class="col-12">
+          <label>
+            Width
+            <span style="opacity: 0.5; padding-left: 5px"> (Format: X%) </span>
+          </label>
+          <input
+            nz-input
+            class="w-100"
+            type="text"
+            [(ngModel)]="valueWidth"
+            [ngModelOptions]="{ standalone: true }"
+            name="valueWidth"
+            placeholder="Width" />
+        </div>
+        <div class="col-12">
+          <label>
+            Height
+            <span style="opacity: 0.5; padding-left: 5px"> (Format: Xpx) </span>
+          </label>
+          <input
+            nz-input
+            class="w-100"
+            type="text"
+            [(ngModel)]="valueHeight"
+            [ngModelOptions]="{ standalone: true }"
+            name="valueHeight"
+            placeholder="Height" />
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

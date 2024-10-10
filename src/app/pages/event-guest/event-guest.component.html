@@ -1,0 +1,41 @@
+<div class="mb-3">
+  <div>
+    <a class="text-primary" [routerLink]="['/events']">
+      <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+      Back to event
+    </a>
+  </div>
+  <div class="my-3">
+    <h4
+      style="
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      "
+      [nzTooltipTitle]="event?.name"
+      nzTooltipPlacement="left"
+      nz-tooltip
+      nz-typography>
+      {{ event?.name }}
+    </h4>
+  </div>
+</div>
+
+<action-bar
+  [filters]="filters"
+  [actions]="actions"
+  (queryParamsChange)="queryParams$.next($event)" />
+<data-table
+  [isAction]="true"
+  [deleteAction]="deleteAction"
+  [headers]="headers"
+  [dataSource]="dataSource"
+  (queryParamsChange)="queryParams$.next($event)" />
+<file-upload-modal
+  [(isVisible)]="isVisbleImport"
+  [defaultFile]="defaultFile"
+  [title]="importTitle"
+  errorFileName="Error_EventGuest"
+  [import]="import.bind(this)"
+  (isImportSuccess)="getDataSource()" />

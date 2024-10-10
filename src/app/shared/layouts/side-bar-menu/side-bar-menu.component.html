@@ -1,0 +1,36 @@
+<ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+  @for (menu of menus; track menu.title) {
+    @if (menu?.children?.length) {
+      <li nz-submenu [nzTitle]="menu.title" [nzIcon]="menu.icon || ''">
+        <ul>
+          @for (submenu of menu.children; track submenu.title) {
+            @if (submenu?.children?.length) {
+              <li nz-submenu [nzTitle]="submenu.title">
+                @for (sub2menu of submenu.children; track sub2menu.title) {
+                  <li nz-menu-item nzMatchRouter="true">
+                    <a [routerLink]="sub2menu.path || '#'">
+                      <span>{{ sub2menu.title }}</span>
+                    </a>
+                  </li>
+                }
+              </li>
+            } @else {
+              <li nz-menu-item nzMatchRouter="true">
+                <a [routerLink]="submenu.path || '#'">
+                  <span>{{ submenu.title }}</span>
+                </a>
+              </li>
+            }
+          }
+        </ul>
+      </li>
+    } @else {
+      <li nz-menu-item nzMatchRouter="true">
+        <a [routerLink]="menu.path || '#'">
+          <span nz-icon [nzType]="menu.icon || ''"></span>
+          <span>{{ menu.title }}</span>
+        </a>
+      </li>
+    }
+  }
+</ul>

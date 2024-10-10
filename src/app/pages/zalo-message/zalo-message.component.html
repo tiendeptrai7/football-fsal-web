@@ -1,0 +1,22 @@
+<action-bar
+  [filters]="filters"
+  [actions]="actions"
+  (queryParamsChange)="queryParams$.next($event)" />
+
+<data-table
+  [isAction]="false"
+  [showSelection]="true"
+  [headers]="headers"
+  [dataSource]="dataSource"
+  [(selectedIndex)]="messageSelected"
+  [actionDisableRule]="disabledMessageHasObserve"
+  (queryParamsChange)="queryParams$.next($event)" />
+
+<zalo-message-observe-modal
+  *ngIf="isVisibleObserve"
+  [selectedNumber]="messageSelected.size"
+  [totalRecord]="totalRecord"
+  [(isVisible)]="isVisibleObserve"
+  [handleObserveMessage]="
+    handleObserveMessage.bind(this)
+  "></zalo-message-observe-modal>
