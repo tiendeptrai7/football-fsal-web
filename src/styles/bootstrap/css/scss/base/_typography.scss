@@ -15,7 +15,6 @@ body {
 	@include font-fam-sans;
 	@include font-size-base;
 	color: $text-color;
-	overflow-x: hidden;
 	img {
 		max-width: 100%;
 	}

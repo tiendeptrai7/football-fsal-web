@@ -4,7 +4,8 @@
 
 ----------------------------------------------------------------------------- */
 ul.navbar-nav li.nav-item {
-  a.nav-link, &.active a.nav-link {
+  a.nav-link,
+  &.active a.nav-link {
     color: $text-color;
   }
 }
@@ -16,14 +17,16 @@ ul.navbar-nav li.nav-item {
   padding: 25px 0;
 
   &.white ul.navbar-nav li.nav-item {
-    a.nav-link, &.active a.nav-link {
+    a.nav-link,
+    &.active a.nav-link {
       color: $white-color;
     }
   }
 }
 
 ul.navbar-nav li.nav-item {
-  a.nav-link, &.active a.nav-link {
+  a.nav-link,
+  &.active a.nav-link {
     color: $white-color;
     font-weight: 700;
     margin-right: 14px;
@@ -48,6 +51,7 @@ nav.main-menu {
         font-weight: 700;
         display: block;
         padding: 15px;
+        text-decoration: none;
       }
     }
 
@@ -167,7 +171,8 @@ nav.mean-nav > ul > li:first-child > a {
 }
 
 .top-header-area.sepherate-header {
-  ul li > a, .header-icons a {
+  ul li > a,
+  .header-icons a {
     color: $text-color;
   }
 }
@@ -224,6 +229,11 @@ nav.main-menu {
 
 .top-header-area {
   transition: 0.3s;
+}
+
+.is-sticky {
+  background-color: $text-color;
+  padding: 15px 0;
 }
 
 ul.navbar-nav {
@@ -290,7 +300,7 @@ a.mobile-show {
     color: $white-color;
   }
 
-  button[type=submit] {
+  button[type='submit'] {
     border: none;
     background-color: $primary-color;
     padding: 15px 30px;
@@ -304,7 +314,7 @@ a.mobile-show {
     color: $white-color;
   }
 
-  button[type=submit] i {
+  button[type='submit'] i {
     margin-left: 5px;
   }
 }
