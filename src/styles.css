@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import './styles/css/main.css';
-@import './styles/css/responsive.css';
-@import './styles//css/animate.css';
-@import './styles//css/magnific-popup.css';
-@import './styles//css/meanmenu.min.css';
-@import './styles//css/owl.carousel.css';
+@import './styles/bootstrap/css/main.css';
+@import './styles/bootstrap/css/responsive.css';
+@import './styles/bootstrap/css/animate.css';
+@import './styles/bootstrap/css/magnific-popup.css';
+@import './styles/bootstrap/css/meanmenu.min.css';
+@import './styles/bootstrap/css/owl.carousel.css';

@@ -6,6 +6,7 @@
     color: $body-color;
     height: $btn-size;
     border-radius: $border-radius;
+    width: 100%;
 
     &:hover,
     &:focus {
@@ -183,8 +184,10 @@ a {
 
 .ant-btn-primary {
     background-color: $brand-primary;
-    border-color: $brand-primary;
     color: $white;
+    border-color: $black !important;
+    border-radius: $border-radius !important;
+
 
     &:hover,
     &:focus {
@@ -255,8 +258,10 @@ a {
 }
 
 .ant-btn-dangerous {
-    color: $brand-danger;
-    border-color: $brand-danger;
+    background-color: $primary-color !important;
+    border-color: $black !important;
+    color: $white !important;
+    border-radius: $border-radius !important;
 
     &:hover,
     &:focus {
